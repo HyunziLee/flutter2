@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(
@@ -18,18 +17,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-  getPermission() async{
-    var status = await Permission.contacts.status;
-    if(status.isGranted){
-      print('허락됨');
-    } else if (status.isDenied){
-      print('거절됨');
-      // Permission.contacts.request(); // 허락해달라고 팝업띄우는 코드 -> 근데 요즘 많이 거절해서 안씀
-      openAppSettings();
-    }
-  }
-
   var total = 3;
   var name = ['홍길동','홍길동2','홍길동3'];
   var count = [0,0,0];
@@ -41,28 +28,19 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  // inintState 안에 적은 코드는 위젯 로드될 때 한번 실행됨
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-  }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: (){
+
             showDialog(context: context, builder: (context){
               return DialogUI(state: total, addOne: addOne, value: value);
             });
           },
         ),
-        appBar: AppBar(title: Text(total.toString()), actions: [
-          IconButton(onPressed: (){getPermission();}, icon: Icon(Icons.contacts))
-        ],),
+        appBar: AppBar(title: Text(total.toString()),),
         body: ListView.builder(
             itemCount: name.length,
             itemBuilder: (context,i){

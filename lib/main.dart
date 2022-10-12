@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:contacts_service/contacts_service.dart';
 
 void main() {
   runApp(
@@ -23,6 +24,20 @@ class _MyAppState extends State<MyApp> {
     var status = await Permission.contacts.status;
     if(status.isGranted){
       print('허락됨');
+      var contacts = await ContactsService.getContacts();
+      // print(contacts[0].givenName);
+
+      setState(() {
+        name = contacts;
+      });
+      print(name);
+
+
+      // 연락처 추가
+      var newPerson = Contact();
+      newPerson.givenName = '민수';
+      await ContactsService.addContact(newPerson);
+
     } else if (status.isDenied){
       print('거절됨');
       // Permission.contacts.request(); // 허락해달라고 팝업띄우는 코드 -> 근데 요즘 많이 거절해서 안씀
@@ -31,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   var total = 3;
-  var name = ['홍길동','홍길동2','홍길동3'];
+  var name = [];
   var count = [0,0,0];
   var value = TextEditingController();
   addOne(){
@@ -70,7 +85,7 @@ class _MyAppState extends State<MyApp> {
               print(i);
               return ListTile(
                 leading: Icon(Icons.person),
-                title: Text(name[i]),
+                title: Text(name[i].toString()),
               );
               },
             ),
